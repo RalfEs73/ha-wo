@@ -97,3 +97,7 @@ Setzt die Version in `Cargo.toml`, baut, committet und pusht die Versionsänderu
 | `-Notes` | Beschreibung des Release (Standard: `wo <Version>`) |
 
 Jede Versionsnummer kann nur einmal verwendet werden, da das Tag `v<Version>` eindeutig sein muss.
+
+## Hinweis
+
+Der Code wurde mit freundlicher Unterstützung der KI [Claude](https://claude.ai) erstellt.
