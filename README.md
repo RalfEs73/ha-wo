@@ -50,3 +50,27 @@ Neue Personen in Home Assistant erscheinen erst nach `wo /reset`.
 - Verbindungs-Timeout 5 s, Gesamt-Timeout 10 s pro Abruf.
 - Ungültiges Token (HTTP 401), Netzwerkfehler und fehlende Entitäten erzeugen eine verständliche Fehlermeldung.
 - Schlägt nur ein Sensor fehl, werden die übrigen trotzdem angezeigt. Der Exit-Code ist nur dann ungleich 0, wenn gar nichts abgerufen werden konnte.
+
+## Bauen und Release
+
+Voraussetzungen: [Rust](https://rustup.rs) und für Releases die GitHub CLI (`winget install --id GitHub.cli`, danach `gh auth login`).
+
+Das Skript `build.ps1` erledigt beides:
+
+```powershell
+.\build.ps1
+```
+Kompiliert mit `cargo build --release`. Das Ergebnis liegt in `target\release\wo.exe`.
+
+```powershell
+.\build.ps1 -Release -Version 0.2.0 -Notes "Beschreibung des Release"
+```
+Setzt die Version in `Cargo.toml`, baut, committet und pusht die Versionsänderung und erstellt auf GitHub das Release `v0.2.0` mit `wo.exe` als Anhang.
+
+| Parameter | Bedeutung |
+|---|---|
+| `-Release` | GitHub-Release erstellen |
+| `-Version` | Neue Versionsnummer (`x.y.z`), sonst gilt die Version aus `Cargo.toml` |
+| `-Notes` | Beschreibung des Release (Standard: `wo <Version>`) |
+
+Jede Versionsnummer kann nur einmal verwendet werden, da das Tag `v<Version>` eindeutig sein muss.
