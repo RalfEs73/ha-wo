@@ -19,6 +19,23 @@ Max:  Unterwegs
 
 Die Parameter funktionieren auch mit `-` oder `--` statt `/` (z. B. `-v`, `--help`), ohne Präfix und unabhängig von der Groß-/Kleinschreibung.
 
+## wo.exe im PATH ablegen
+
+Ist der Ordner mit `wo.exe` im `PATH`, genügt in jeder Konsole, in jedem Verzeichnis und in Skripten der Aufruf `wo`. Du musst weder den vollen Pfad eintippen noch erst in den Ordner wechseln.
+
+1. `wo.exe` in einen festen Ordner legen, z. B. `C:\Tools\wo`.
+2. Den Ordner zum Benutzer-`PATH` hinzufügen, z. B. per PowerShell:
+   ```powershell
+   $dir = 'C:\Tools\wo'
+   $path = [Environment]::GetEnvironmentVariable('Path', 'User')
+   if (($path -split ';') -notcontains $dir) {
+       [Environment]::SetEnvironmentVariable('Path', "$path;$dir", 'User')
+   }
+   ```
+   Oder über die Oberfläche: *Windows-Taste → "Umgebungsvariablen für dieses Konto bearbeiten" → Path → Bearbeiten → Neu* und den Ordner eintragen.
+3. Bereits geöffnete Konsolen neu starten, damit sie den neuen `PATH` kennen.
+4. Testen mit `wo /version`.
+
 ## Einrichtung
 
 Beim ersten Start fragt `wo` nach:
