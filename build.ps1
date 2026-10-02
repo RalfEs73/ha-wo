@@ -28,6 +28,18 @@ function Invoke-Native {
 
 $cargoToml = Join-Path $PSScriptRoot 'Cargo.toml'
 
+# Vorab prüfen, ob das Release schon existiert, bevor etwas geändert wird.
+if ($Release) {
+    if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
+        throw "GitHub CLI 'gh' nicht gefunden. Installation: winget install --id GitHub.cli"
+    }
+    $target = if ($Version) { $Version } else { ([regex]::Match((Get-Content $cargoToml -Raw), '(?m)^version\s*=\s*"([^"]*)"')).Groups[1].Value }
+    gh release view "v$target" *> $null
+    if ($LASTEXITCODE -eq 0) {
+        throw "Das Release v$target existiert bereits. Bitte eine neue Versionsnummer mit -Version angeben (z. B. -Version 0.2.1)."
+    }
+}
+
 # Neue Versionsnummer in Cargo.toml eintragen (nur die erste version = "..." im [package]-Block).
 if ($Version) {
     if ($Version -notmatch '^\d+\.\d+\.\d+$') { throw "Ungültige Version '$Version'. Erwartet: x.y.z" }
@@ -46,9 +58,6 @@ Write-Host "Fertig: $exe" -ForegroundColor Green
 
 if (-not $Release) { return }
 
-if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
-    throw "GitHub CLI 'gh' nicht gefunden. Installation: winget install --id GitHub.cli"
-}
 if (-not $Notes) { $Notes = "wo $current" }
 $tag = "v$current"
 
