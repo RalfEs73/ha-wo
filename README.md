@@ -41,7 +41,7 @@ Ist der Ordner mit `wo.exe` im `PATH`, genügt in jeder Konsole, in jedem Verzei
 Beim ersten Start fragt `wo` nach:
 
 1. **Home-Assistant-URL**, z. B. `http://homeassistant.local:8123`
-2. **Long-Lived Access Token** (in Home Assistant unter *Profil → Sicherheit → Langlebige Zugriffstokens* erstellen)
+2. **Long-Lived Access Token** (in Home Assistant unter *Profil → Sicherheit → Langlebige Zugriffstokens* erstellen). Die Eingabe bleibt unsichtbar.
 
 Danach ruft `wo` alle `person.*`- und `device_tracker.*`-Entitäten ab und listet sie nummeriert auf. Du gibst die Nummern der Sensoren an, die angezeigt werden sollen (kommagetrennt, z. B. `1,3`). Enter übernimmt alle.
 
@@ -58,7 +58,13 @@ Pro ausgewähltem Sensor wird `<Name>: <Ort>` ausgegeben. Der Abruf erfolgt para
 
 Die Konfiguration liegt als JSON in `%APPDATA%\wo\config.json` und wird bei jedem Start automatisch geladen.
 
-> **Hinweis:** Das Token wird im Klartext in dieser Datei gespeichert und bei der Eingabe nicht verborgen.
+### Token-Verschlüsselung
+
+Das Token wird mit der Windows Data Protection API (DPAPI) verschlüsselt in der Konfigurationsdatei gespeichert. Es lässt sich nur mit deinem Windows-Benutzerkonto auf diesem Rechner entschlüsseln, ein Passwort ist dafür nicht nötig.
+
+- Kopierst du `config.json` auf einen anderen Rechner oder in ein anderes Benutzerkonto, funktioniert sie nicht. Führe dort `wo /reset` aus.
+- Eine Konfiguration aus Version 0.1.x mit Klartext-Token wird beim ersten Start automatisch verschlüsselt.
+- Der Schutz gilt für die Datei. Programme, die unter deinem Benutzerkonto laufen, können das Token weiterhin entschlüsseln.
 
 Neue Personen in Home Assistant erscheinen erst nach `wo /reset`.
 

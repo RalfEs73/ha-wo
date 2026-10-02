@@ -1,5 +1,6 @@
 mod config;
 mod ha;
+mod secret;
 
 use config::Config;
 use std::io::{self, Write};
@@ -69,7 +70,7 @@ fn setup() -> Result<(), String> {
     if !url.contains("://") {
         url = format!("http://{url}");
     }
-    let token = prompt("Long-Lived Access Token: ")?;
+    let token = secret::read_hidden(|| prompt("Long-Lived Access Token (Eingabe bleibt unsichtbar): "))?;
     if url == "http://" || token.is_empty() {
         return Err("URL und Token dürfen nicht leer sein.".into());
     }
