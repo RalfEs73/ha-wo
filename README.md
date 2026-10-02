@@ -8,16 +8,6 @@ Anna: Arbeit
 Max:  Unterwegs
 ```
 
-## Bauen
-
-Voraussetzung: [Rust](https://rustup.rs) (Toolchain für Windows).
-
-```
-cargo build --release
-```
-
-Das Ergebnis liegt in `target\release\wo.exe`. Die Datei ist eigenständig und kann an einen beliebigen Ort kopiert werden, z. B. in einen Ordner im `PATH`.
-
 ## Verwendung
 
 | Aufruf | Wirkung |
@@ -60,12 +50,3 @@ Neue Personen in Home Assistant erscheinen erst nach `wo /reset`.
 - Verbindungs-Timeout 5 s, Gesamt-Timeout 10 s pro Abruf.
 - Ungültiges Token (HTTP 401), Netzwerkfehler und fehlende Entitäten erzeugen eine verständliche Fehlermeldung.
 - Schlägt nur ein Sensor fehl, werden die übrigen trotzdem angezeigt. Der Exit-Code ist nur dann ungleich 0, wenn gar nichts abgerufen werden konnte.
-
-## Projektstruktur
-
-```
-Cargo.toml      Projektdefinition und Abhängigkeiten
-src/main.rs     Einstieg, Parameter, Setup, Ausgabe
-src/ha.rs       Home-Assistant-REST-Client
-src/config.rs   Laden, Speichern und Löschen der Konfiguration
-```
